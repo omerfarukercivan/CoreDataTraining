@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE7552062A4AD5C3002CABD2 /* CoreDataTrainingModels.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE7552042A4AD5C3002CABD2 /* CoreDataTrainingModels.xcdatamodeld */; };
 		AE76C1582A49E30F0063481F /* UIColor+Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE76C1572A49E30F0063481F /* UIColor+Theme.swift */; };
 		AE76C15A2A49E7990063481F /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE76C1592A49E7990063481F /* Company.swift */; };
 		AE76C15C2A49F0F60063481F /* CreateCompanyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE76C15B2A49F0F60063481F /* CreateCompanyController.swift */; };
@@ -16,9 +17,11 @@
 		AE8FB4822A49BA2A0027DD0F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE8FB4802A49BA2A0027DD0F /* Main.storyboard */; };
 		AE8FB4842A49BA2B0027DD0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE8FB4832A49BA2B0027DD0F /* Assets.xcassets */; };
 		AE8FB4872A49BA2B0027DD0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE8FB4852A49BA2B0027DD0F /* LaunchScreen.storyboard */; };
+		AE906A872A4AEA8E0080B9E1 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE906A862A4AEA8E0080B9E1 /* CoreDataManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AE7552052A4AD5C3002CABD2 /* CoreDataTrainingModels.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataTrainingModels.xcdatamodel; sourceTree = "<group>"; };
 		AE76C1572A49E30F0063481F /* UIColor+Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Theme.swift"; sourceTree = "<group>"; };
 		AE76C1592A49E7990063481F /* Company.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
 		AE76C15B2A49F0F60063481F /* CreateCompanyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCompanyController.swift; sourceTree = "<group>"; };
@@ -30,6 +33,7 @@
 		AE8FB4832A49BA2B0027DD0F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AE8FB4862A49BA2B0027DD0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AE8FB4882A49BA2B0027DD0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AE906A862A4AEA8E0080B9E1 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,12 +70,14 @@
 				AE8FB47C2A49BA2A0027DD0F /* SceneDelegate.swift */,
 				AE8FB47E2A49BA2A0027DD0F /* CompaniesController.swift */,
 				AE76C15B2A49F0F60063481F /* CreateCompanyController.swift */,
+				AE906A862A4AEA8E0080B9E1 /* CoreDataManager.swift */,
 				AE8FB4802A49BA2A0027DD0F /* Main.storyboard */,
 				AE8FB4832A49BA2B0027DD0F /* Assets.xcassets */,
 				AE8FB4852A49BA2B0027DD0F /* LaunchScreen.storyboard */,
 				AE8FB4882A49BA2B0027DD0F /* Info.plist */,
 				AE76C1572A49E30F0063481F /* UIColor+Theme.swift */,
 				AE76C1592A49E7990063481F /* Company.swift */,
+				AE7552042A4AD5C3002CABD2 /* CoreDataTrainingModels.xcdatamodeld */,
 			);
 			path = CoreDataTraining;
 			sourceTree = "<group>";
@@ -148,10 +154,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE8FB47F2A49BA2A0027DD0F /* CompaniesController.swift in Sources */,
+				AE7552062A4AD5C3002CABD2 /* CoreDataTrainingModels.xcdatamodeld in Sources */,
 				AE76C1582A49E30F0063481F /* UIColor+Theme.swift in Sources */,
 				AE8FB47B2A49BA2A0027DD0F /* AppDelegate.swift in Sources */,
 				AE76C15A2A49E7990063481F /* Company.swift in Sources */,
 				AE8FB47D2A49BA2A0027DD0F /* SceneDelegate.swift in Sources */,
+				AE906A872A4AEA8E0080B9E1 /* CoreDataManager.swift in Sources */,
 				AE76C15C2A49F0F60063481F /* CreateCompanyController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -373,6 +381,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		AE7552042A4AD5C3002CABD2 /* CoreDataTrainingModels.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				AE7552052A4AD5C3002CABD2 /* CoreDataTrainingModels.xcdatamodel */,
+			);
+			currentVersion = AE7552052A4AD5C3002CABD2 /* CoreDataTrainingModels.xcdatamodel */;
+			path = CoreDataTrainingModels.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = AE8FB46F2A49BA2A0027DD0F /* Project object */;
 }

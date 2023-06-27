@@ -6,14 +6,25 @@
 //
 
 import UIKit
+import CoreData
+
+protocol CreateCompanyControllerDelegate {
+    func didAddCompany(_ company: Company)
+}
 
 class CreateCompanyController: UIViewController {
+    
+    var delegate: CreateCompanyControllerDelegate?
+    var company: Company? {
+        didSet {
+            nameTextField.text = company?.name
+        }
+    }
     
     let nameLabel: UILabel = {
         let label = UILabel()
         
         label.text = "Name"
-        label.backgroundColor = .red
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -28,15 +39,20 @@ class CreateCompanyController: UIViewController {
         return textField
     }()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationItem.title = company == nil ? "Create Company" : "Edit Company"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .darkBlue
         
         setupUI()
         
-        navigationItem.title = "Create Company"
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
     }
     
     private func setupUI() {
@@ -55,15 +71,56 @@ class CreateCompanyController: UIViewController {
             lightBlueBackgroundView.heightAnchor.constraint(equalToConstant: 50),
             
             nameLabel.topAnchor.constraint(equalTo: view.topAnchor),
-            nameLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
+            nameLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
             nameLabel.widthAnchor.constraint(equalToConstant: 100),
             nameLabel.heightAnchor.constraint(equalToConstant: 50),
             
+            nameTextField.topAnchor.constraint(equalTo: nameLabel.topAnchor),
+            nameTextField.rightAnchor.constraint(equalTo: view.rightAnchor),
+            nameTextField.leftAnchor.constraint(equalTo: nameLabel.rightAnchor),
+            nameTextField.bottomAnchor.constraint(equalTo: nameLabel.bottomAnchor)
         ])
-        nameLabel.backgroundColor = .yellow
     }
     
     @objc func handleCancel() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func handleSave() {
+        if company == nil {
+            createCompany()
+        } else {
+            saveCompanyChanges()
+        }
+    }
+    
+    private func saveCompanyChanges() {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        
+        company?.name = nameTextField.text
+        
+        do {
+            try context.save()
+            dismiss(animated: true, completion: nil)
+        } catch let saveError {
+            print("Failed to save company changes:", saveError)
+        }
+    }
+    
+    private func createCompany() {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
+        
+        company.setValue(nameTextField.text, forKey: "name")
+        
+        do {
+            try context.save()
+            
+            dismiss(animated: true) {
+                self.delegate?.didAddCompany(company as! Company)
+            }
+        } catch let saveError {
+            print("Failed to save company: ", saveError)
+        }
     }
 }

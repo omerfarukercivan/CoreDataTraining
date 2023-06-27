@@ -17,14 +17,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
         let companiesController = CompaniesController()
         let navController = CustomNavigationController(rootViewController: companiesController)
-        
         
         UINavigationBar.appearance().backgroundColor = .lightRed
         UINavigationBar.appearance().barTintColor = .lightRed
@@ -33,7 +31,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UINavigationBar.appearance().prefersLargeTitles = true
         UINavigationBar.appearance().largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        
         
         window.rootViewController = navController
         self.window = window
