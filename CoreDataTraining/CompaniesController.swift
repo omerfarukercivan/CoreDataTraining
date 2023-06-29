@@ -9,8 +9,15 @@ import UIKit
 import CoreData
 
 class CompaniesController: UITableViewController, CreateCompanyControllerDelegate {
+    func didEditCompany(company: Company) {
+        let row = companies.index(of: company)
+        let reloadIndexPath = IndexPath(row: row!, section: 0)
+        
+        tableView.reloadRows(at: [reloadIndexPath], with: .middle)
+    }
     
-    func didAddCompany(_ company: Company) {
+    
+    func didAddCompany(company: Company) {
         companies.append(company)
         let newIndexPath = IndexPath(row: companies.count - 1, section: 0)
         tableView.insertRows(at: [newIndexPath], with: .automatic)
@@ -19,6 +26,8 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
     var companies = [Company]()
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit", handler: editHandlerFunction)
+        
         let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { _, indexPath in
             let company = self.companies[indexPath.row]
             let context = CoreDataManager.shared.persistentContainer.viewContext
@@ -34,13 +43,15 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
             }
         }
         
-        let editAction = UITableViewRowAction(style: .normal, title: "Edit", handler: editHandlerFunction)
+        deleteAction.backgroundColor = .lightRed
+        editAction.backgroundColor = .darkBlue
         
         return [deleteAction, editAction]
     }
     
     private func editHandlerFunction(action: UITableViewRowAction, indexPath: IndexPath) {
         let editCompanyController = CreateCompanyController()
+        editCompanyController.delegate = self
         editCompanyController.company = companies[indexPath.row]
         let navController = CustomNavigationController(rootViewController: editCompanyController)
         present(navController, animated: true, completion: nil)
@@ -83,9 +94,21 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
         let company = companies[indexPath.row]
         
+        if let name = company.name, let founded = company.founded {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMMM dd, yyyy"
+            
+            let foundedDateString = dateFormatter.string(from: founded)
+            
+            let dateString = "\(name) - Founded: \(foundedDateString)"
+            
+            cell.textLabel?.text = dateString
+        } else {
+            cell.textLabel?.text = company.name
+        }
+        
         cell.backgroundColor = .tealColor
         
-        cell.textLabel?.text = company.name
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         
