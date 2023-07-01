@@ -13,9 +13,10 @@ protocol CreateCompanyControllerDelegate {
     func didEditCompany(company: Company)
 }
 
-class CreateCompanyController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+class CreateCompanyController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var delegate: CreateCompanyControllerDelegate?
+    
     var company: Company? {
         didSet {
             guard let founded = company?.founded else { return }
@@ -36,15 +37,6 @@ class CreateCompanyController: UIViewController, UINavigationControllerDelegate,
         companyImageView.layer.borderColor = UIColor.darkBlue.cgColor
         companyImageView.layer.borderWidth = 2
     }
-    
-    let lightBlueBackgroundView: UIView = {
-        let bg = UIView()
-        
-        bg.backgroundColor = .lightBlue
-        bg.translatesAutoresizingMaskIntoConstraints = false
-        
-        return bg
-    }()
     
     let nameLabel: UILabel = {
         let label = UILabel()
@@ -94,25 +86,20 @@ class CreateCompanyController: UIViewController, UINavigationControllerDelegate,
         super.viewDidLoad()
         view.backgroundColor = .darkBlue
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
-        
         setupUI()
+        setupCancelButton()
+        setupSaveButton(selector: #selector(handleSave))
     }
     
     private func setupUI() {
-        view.addSubview(lightBlueBackgroundView)
+        let lightBlueBackgroundView = setupLightBlueBackgroundView(height: 350)
+        
         view.addSubview(companyImageView)
         view.addSubview(nameLabel)
         view.addSubview(nameTextField)
         view.addSubview(datePicker)
         
         NSLayoutConstraint.activate([
-            lightBlueBackgroundView.topAnchor.constraint(equalTo: view.topAnchor),
-            lightBlueBackgroundView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            lightBlueBackgroundView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            lightBlueBackgroundView.heightAnchor.constraint(equalToConstant: 350),
-            
             companyImageView.topAnchor.constraint(equalTo: view.topAnchor),
             companyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             companyImageView.heightAnchor.constraint(equalToConstant: 100),
@@ -131,13 +118,8 @@ class CreateCompanyController: UIViewController, UINavigationControllerDelegate,
             datePicker.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
             datePicker.leftAnchor.constraint(equalTo: view.leftAnchor),
             datePicker.rightAnchor.constraint(equalTo: view.rightAnchor),
-            //            datePicker.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             datePicker.bottomAnchor.constraint(equalTo: lightBlueBackgroundView.bottomAnchor)
         ])
-    }
-    
-    @objc func handleCancel() {
-        dismiss(animated: true, completion: nil)
     }
     
     @objc func handleSave() {
@@ -169,7 +151,6 @@ class CreateCompanyController: UIViewController, UINavigationControllerDelegate,
         }
         
         setupCircularImageStyle()
-        
         dismiss(animated: true, completion: nil)
     }
     
@@ -183,13 +164,13 @@ class CreateCompanyController: UIViewController, UINavigationControllerDelegate,
             let imageData = companyImage.jpegData(compressionQuality: 1)
             company?.imageData = imageData
         }
-
         
         do {
             try context.save()
             dismiss(animated: true) {
                 self.delegate?.didEditCompany(company: self.company!)
             }
+            
         } catch let saveError {
             print("Failed to save company changes:", saveError)
         }
@@ -201,7 +182,7 @@ class CreateCompanyController: UIViewController, UINavigationControllerDelegate,
         
         company.setValue(nameTextField.text, forKey: "name")
         company.setValue(datePicker.date, forKey: "founded")
-        
+                
         if let companyImage = companyImageView.image {
             let imageData = companyImage.jpegData(compressionQuality: 1)
             company.setValue(imageData, forKey: "imageData")
@@ -209,10 +190,10 @@ class CreateCompanyController: UIViewController, UINavigationControllerDelegate,
         
         do {
             try context.save()
-            
             dismiss(animated: true) {
                 self.delegate?.didAddCompany(company: company as! Company)
             }
+            
         } catch let saveError {
             print("Failed to save company: ", saveError)
         }

@@ -27,11 +27,31 @@ struct CoreDataManager {
         
         do {
             let companies = try context.fetch(fetchRequest)
-            return compani es
+            return companies
             
         } catch let fetchError {
             print("Failed to fetch companies:", fetchError)
             return []
+        }
+    }
+    
+    func createEmployee(employeeName: String, company: Company, birthday: Date) -> (Employee?, Error?) {
+        let context = persistentContainer.viewContext
+        let employee = NSEntityDescription.insertNewObject(forEntityName: "Employee", into: context) as! Employee
+        let employeeInformation = NSEntityDescription.insertNewObject(forEntityName: "EmployeeInformation", into: context) as! EmployeeInformation
+        
+        employee.company = company
+        employee.employeeInformation = employeeInformation
+        
+        employee.setValue(employeeName, forKey: "name")
+        employeeInformation.birthday = birthday
+        
+        do {
+            try context.save()
+            return (employee, nil)
+            
+        } catch let error {
+            return (nil, error)
         }
     }
 }

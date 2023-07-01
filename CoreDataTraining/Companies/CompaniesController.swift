@@ -19,8 +19,8 @@ class CompaniesController: UITableViewController {
         self.companies = CoreDataManager.shared.fetchCompanies()
         
         navigationItem.title = "Companies"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "plus").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleAddCompany))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleReset))
+        setupPlusButtonInNavBar(selector: #selector(handleAddCompany))
         
         tableView.backgroundColor = .darkBlue
         tableView.separatorColor = .white
