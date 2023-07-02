@@ -52,6 +52,20 @@ class CreateEmployeeController: UIViewController {
         return textField
     }()
     
+    let employeeTypeSegmentedControl: UISegmentedControl = {
+        let types = [
+            EmployeeType.Executive.rawValue,
+            EmployeeType.SeniorManagement.rawValue,
+            EmployeeType.Staff.rawValue
+        ]
+        let sc = UISegmentedControl(items: types)
+        
+        sc.selectedSegmentIndex = 0
+        sc.translatesAutoresizingMaskIntoConstraints = false
+        
+        return sc
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .darkBlue
@@ -63,12 +77,13 @@ class CreateEmployeeController: UIViewController {
     
     private func setupUI() {
         //        let lightBlueBackgroundView = setupLightBlueBackgroundView(height: 350)
-        _ = setupLightBlueBackgroundView(height: 350)
+        _ = setupLightBlueBackgroundView(height: 150)
         
         view.addSubview(nameLabel)
         view.addSubview(nameTextField)
         view.addSubview(birthdayLabel)
         view.addSubview(birthdayTextField)
+        view.addSubview(employeeTypeSegmentedControl)
         
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: view.topAnchor),
@@ -89,7 +104,12 @@ class CreateEmployeeController: UIViewController {
             birthdayTextField.topAnchor.constraint(equalTo: birthdayLabel.topAnchor),
             birthdayTextField.rightAnchor.constraint(equalTo: view.rightAnchor),
             birthdayTextField.leftAnchor.constraint(equalTo: birthdayLabel.rightAnchor),
-            birthdayTextField.bottomAnchor.constraint(equalTo: birthdayLabel.bottomAnchor)
+            birthdayTextField.bottomAnchor.constraint(equalTo: birthdayLabel.bottomAnchor),
+            
+            employeeTypeSegmentedControl.topAnchor.constraint(equalTo: birthdayLabel.bottomAnchor),
+            employeeTypeSegmentedControl.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
+            employeeTypeSegmentedControl.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+            employeeTypeSegmentedControl.heightAnchor.constraint(equalToConstant: 34)
         ])
     }
     
@@ -97,10 +117,10 @@ class CreateEmployeeController: UIViewController {
         guard let employeeName = nameTextField.text else { return }
         guard let company = self.company else { return }
         guard let birthdayText = birthdayTextField.text else { return }
+        guard let employeeType = employeeTypeSegmentedControl.titleForSegment(at: employeeTypeSegmentedControl.selectedSegmentIndex) else { return }
         
         if birthdayText.isEmpty || employeeName.isEmpty {
             showError(title: "Empty Text Field", message: "Empty fields are not allowed!")
-            
             return
         }
         
@@ -109,11 +129,10 @@ class CreateEmployeeController: UIViewController {
         
         guard let birthdayDate = dateFormatter.date(from: birthdayText) else {
             showError(title: "Bad Date", message: "Birthday date entered no valid")
-            
             return
         }
         
-        let tupple = CoreDataManager.shared.createEmployee(employeeName: employeeName, company: company, birthday: birthdayDate)
+        let tupple = CoreDataManager.shared.createEmployee(employeeName: employeeName, company: company, birthday: birthdayDate, employeeType: employeeType)
         
         if let error = tupple.1 {
             print(error)
