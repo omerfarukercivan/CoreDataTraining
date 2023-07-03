@@ -12,9 +12,9 @@ protocol CreateEmployeeControllerDelegate {
 }
 
 class CreateEmployeeController: UIViewController {
-    
-    var company: Company?
     var delegate: CreateEmployeeControllerDelegate?
+    var company: Company?
+    var employee: Employee?
     
     let nameLabel: UILabel = {
         let label = UILabel()
@@ -76,7 +76,6 @@ class CreateEmployeeController: UIViewController {
     }
     
     private func setupUI() {
-        //        let lightBlueBackgroundView = setupLightBlueBackgroundView(height: 350)
         _ = setupLightBlueBackgroundView(height: 150)
         
         view.addSubview(nameLabel)

@@ -8,7 +8,6 @@
 import UIKit
 
 class CompanyCell: UITableViewCell {
-    
     var company: Company? {
         didSet {
             nameFoundedDateLabel.text = company?.name

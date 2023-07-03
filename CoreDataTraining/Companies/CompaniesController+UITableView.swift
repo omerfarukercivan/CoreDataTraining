@@ -8,7 +8,6 @@
 import UIKit
 
 extension CompaniesController {
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let employeesController = EmployeesController()
         let company = companies[indexPath.row]
@@ -17,10 +16,8 @@ extension CompaniesController {
         navigationController?.pushViewController(employeesController, animated: true)
     }
     
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let editAction = UITableViewRowAction(style: .normal, title: "Edit", handler: editHandlerFunction)
-        
-        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { _, indexPath in
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, completion in
             let company = self.companies[indexPath.row]
             let context = CoreDataManager.shared.persistentContainer.viewContext
             
@@ -33,20 +30,26 @@ extension CompaniesController {
             } catch let saveError {
                 print("Failed to delete company:", saveError)
             }
+            
+            completion(true)
         }
+        
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { _, _, completion in
+            let editCompanyController = CreateCompanyController()
+            editCompanyController.delegate = self
+            editCompanyController.company = self.companies[indexPath.row]
+            let navController = CustomNavigationController(rootViewController: editCompanyController)
+            self.present(navController, animated: true, completion: nil)
+            
+            completion(true)
+        }
+        
+        let swipeConfiguration = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
         
         deleteAction.backgroundColor = .lightRed
         editAction.backgroundColor = .darkBlue
         
-        return [deleteAction, editAction]
-    }
-    
-    private func editHandlerFunction(action: UITableViewRowAction, indexPath: IndexPath) {
-        let editCompanyController = CreateCompanyController()
-        editCompanyController.delegate = self
-        editCompanyController.company = companies[indexPath.row]
-        let navController = CustomNavigationController(rootViewController: editCompanyController)
-        present(navController, animated: true, completion: nil)
+        return swipeConfiguration
     }
     
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {

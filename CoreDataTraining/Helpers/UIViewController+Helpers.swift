@@ -8,7 +8,6 @@
 import UIKit
 
 extension UIViewController {
-    
     func setupLightBlueBackgroundView(height: CGFloat) -> UIView {
         let lightBlueBackgroundView = UIView()
         lightBlueBackgroundView.backgroundColor = .lightBlue
